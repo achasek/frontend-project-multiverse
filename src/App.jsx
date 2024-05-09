@@ -1,10 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import metMuseumService from './services/metMuseum'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   return await metMuseumService.fetchAllData();
+    // }
+    // const fetchData = async () => {
+    //   return await metMuseumService.fetchSingleDepartmentData(3|9|12);
+    // }
+    // const fetchData = async () => {
+    //   // param must be string
+    //   return await metMuseumService.fetchDataAfterDate("2022-10-22");
+    // }
+    // const fetchData = async () => {
+    //   return await metMuseumService.fetchDepartmentAndDataAfterDate("2022-10-22", 3|9|12);
+    // }
+    // const fetchData = async () => {
+    //   return await metMuseumService.fetchDataById(8);
+    // }
+    // const fetchData = async () => {
+    //   return await metMuseumService.fetchAllDeparmentsList();
+    // }
+    const fetchData = async () => {
+      return await metMuseumService.fetchDataBySearchQuery('sunflowers');
+    }
+    console.log(fetchData());
+  }, []);
 
   return (
     <>
