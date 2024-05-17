@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import metMuseumService from './services/metMuseum'
 import { Header } from './components/Header'
 import { ArtCard } from './components/ArtCard'
+import { ArtContext } from './Contexts';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [art, setArt] = useState({})
+  const [art, setArt] = useState({});
+
+  // const generateRandomId =  () => {
+  //   return Math.floor(Math.random() * 488334);
+  // }
 
   useEffect(() => {
     // const fetchData = async () => {
@@ -37,24 +39,24 @@ function App() {
     console.log(fetchData());
   }, []);
 
+  const generateNewArt = async () => {
+    await metMuseumService.
+      fetchDataById(Math.floor(Math.random() * 100) + 1)
+      .then((data) => setArt(data || {}));
+  };
+
   return (
     <>
       <Header />
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={async () => {
-          await metMuseumService.
-            fetchDataById(Math.floor(Math.random() * 100) + 1)
-            .then((data) => setArt(data || {}));
-        }}>
+        <button onClick={() => generateNewArt()}>
           More Art
         </button>
       </div>
 
-      {/* maybe decide to pass art data w/ context? */}
-      <ArtCard art={art} />
+      <ArtContext.Provider value={art}>
+        <ArtCard />
+      </ArtContext.Provider>
     </>
   )
 }
