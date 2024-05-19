@@ -27,7 +27,9 @@ export const ArtCard = () => {
       </CardContent>
       <CardActions>
         <Button size="small">Favorite</Button>
-        <Button size="small">Learn More</Button>
+        <a href={art.objectWikidata_URL || art.objectURL} target='blank'>
+          <Button size="small">Learn More</Button>
+        </a>
       </CardActions>
     </Card>
   );
