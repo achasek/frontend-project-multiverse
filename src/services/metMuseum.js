@@ -47,7 +47,7 @@ const fetchDepartmentAndDataAfterDate = async (date, departmentId) => {
 const fetchDataById = async (id) => {
     try {
         const response = await axios.get(`${BASE_URL}/public/collection/v1/objects/${id}`);
-        console.log(response)
+        // console.log(response)
         return response.data
     } catch(error) {
         console.log(error)
