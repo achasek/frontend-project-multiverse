@@ -82,12 +82,37 @@ export default function App() {
   
   const darkModeTheme = createTheme(getDesignTokens(themeMode));
 
+  function checkImageDataCorrect(data) {
+    return data.primaryImage !== "";
+  }
+
+  async function handleFetchArt () {
+      const data = await metMuseumService.fetchDataById(Math.floor(Math.random() * 400) + 1);
+      return data;
+  }
+
+  async function continuousFetchArt() {
+    let isImageCorrect = false;
+    let data;
+    while (!isImageCorrect) {
+        console.log("should get continuous stuff");
+        data = await handleFetchArt();
+        if(data.hasOwnProperty('primaryImage')) {isImageCorrect = checkImageDataCorrect(data)};
+      }
+      setArt(data);
+  }
+
   return (
     <>
     <ThemeProvider theme={darkModeTheme}>
       <Header onThemeChange={setThemeMode} themeMode={themeMode}/>
       <div className="card">
-        <button onClick={() => generateNewArt()}>
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <button onClick={() => {
+          setArt(continuousFetchArt)
+        }}>
           More Art
         </button>
       </div>
