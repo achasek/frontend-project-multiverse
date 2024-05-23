@@ -7,10 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 const navItems = ['Home', 'About', 'Contact'];
 
-export const Header = () => {
+export const Header = ({ onThemeChange, themeMode }) => {
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -21,6 +23,13 @@ export const Header = () => {
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
+          {themeMode === 'light' ? 
+          <IconButton onClick={() => onThemeChange('dark')}>
+            <DarkModeIcon />
+          </IconButton> : 
+          <IconButton onClick={() => onThemeChange('light')}>
+          <LightModeIcon />
+          </IconButton>}
           <IconButton
             color="inherit"
             aria-label="open drawer"

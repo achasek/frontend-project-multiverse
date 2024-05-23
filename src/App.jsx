@@ -3,10 +3,45 @@ import './App.css'
 import metMuseumService from './services/metMuseum'
 import { Header } from './components/Header'
 import { ArtCard } from './components/ArtCard'
+import * as React from 'react';
+import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
+import { amber, grey } from '@mui/material/colors';
 import { ArtContext } from './Contexts';
 
-function App() {
+const getDesignTokens = (mode) => ({
+  palette: {
+    mode,
+    primary: {
+      ...amber,
+      ...(mode === 'dark' && {
+        main: grey[300],
+      }),
+    },
+    ...(mode === 'dark' && {
+      background: {
+        default: grey[900],
+        paper: grey[900],
+      },
+    }),
+    text: {
+      ...(mode === 'light'
+        ? {
+            primary: grey[900],
+            secondary: grey[800],
+          }
+        : {
+            primary: '#fff',
+            secondary: grey[500],
+          }),
+    },
+  },
+});
+
+
+export default function App() {
   const [art, setArt] = useState({});
+  const [themeMode, setThemeMode] = useState('light')
+  const theme = useTheme();
 
   // const generateRandomId =  () => {
   //   return Math.floor(Math.random() * 488334);
@@ -39,6 +74,14 @@ function App() {
     console.log(fetchData());
   }, []);
 
+  const generateNewArt = async () => {
+    await metMuseumService.
+    fetchDataById(Math.floor(Math.random() * 100) + 1)
+    .then((data) => setArt(data || {}));
+  };
+  
+  const darkModeTheme = createTheme(getDesignTokens(themeMode));
+
   function checkImageDataCorrect(data) {
     return data.primaryImage !== "";
   }
@@ -59,10 +102,10 @@ function App() {
       setArt(data);
   }
 
-
   return (
     <>
-      <Header />
+    <ThemeProvider theme={darkModeTheme}>
+      <Header onThemeChange={setThemeMode} themeMode={themeMode}/>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -77,8 +120,9 @@ function App() {
       <ArtContext.Provider value={art}>
         <ArtCard />
       </ArtContext.Provider>
+      </ThemeProvider>
     </>
   )
 }
 
-export default App
+
