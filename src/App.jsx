@@ -3,7 +3,6 @@ import './App.css'
 import metMuseumService from './services/metMuseum'
 import { Header } from './components/Header'
 import { ArtCard } from './components/ArtCard'
-import * as React from 'react';
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { amber, grey } from '@mui/material/colors';
 import { ArtContext } from './Contexts';
@@ -43,42 +42,42 @@ export default function App() {
   const [themeMode, setThemeMode] = useState('light')
   const theme = useTheme();
 
-  // const generateRandomId =  () => {
-  //   return Math.floor(Math.random() * 488334);
-  // }
+  // useEffect(() => {
+  //   // const fetchData = async () => {
+  //   //   return await metMuseumService.fetchAllData();
+  //   // }
+  //   // const fetchData = async () => {
+  //   //   return await metMuseumService.fetchSingleDepartmentData(3|9|12);
+  //   // }
+  //   // const fetchData = async () => {
+  //   //   // param must be string
+  //   //   return await metMuseumService.fetchDataAfterDate("2022-10-22");
+  //   // }
+  //   // const fetchData = async () => {
+  //   //   return await metMuseumService.fetchDepartmentAndDataAfterDate("2022-10-22", 3|9|12);
+  //   // }
+  //   // const fetchData = async () => {
+  //   //   return await metMuseumService.fetchDataById(8);
+  //   // }
+  //   // const fetchData = async () => {
+  //   //   return await metMuseumService.fetchAllDeparmentsList();
+  //   // }
+  //   const fetchData = async () => {
+  //     return await metMuseumService.fetchDataBySearchQuery('sunflowers');
+  //   }
+    
+  //   console.log(fetchData());
+  // }, []);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   return await metMuseumService.fetchAllData();
-    // }
-    // const fetchData = async () => {
-    //   return await metMuseumService.fetchSingleDepartmentData(3|9|12);
-    // }
-    // const fetchData = async () => {
-    //   // param must be string
-    //   return await metMuseumService.fetchDataAfterDate("2022-10-22");
-    // }
-    // const fetchData = async () => {
-    //   return await metMuseumService.fetchDepartmentAndDataAfterDate("2022-10-22", 3|9|12);
-    // }
-    // const fetchData = async () => {
-    //   return await metMuseumService.fetchDataById(8);
-    // }
-    // const fetchData = async () => {
-    //   return await metMuseumService.fetchAllDeparmentsList();
-    // }
-    const fetchData = async () => {
-      return await metMuseumService.fetchDataBySearchQuery('sunflowers');
-    }
-    
-    console.log(fetchData());
-  }, []);
+    const initialFetch = async () => {
+      const initialData = await metMuseumService.fetchDataById(3);
+      setArt(initialData);
+    };
 
-  const generateNewArt = async () => {
-    await metMuseumService.
-    fetchDataById(Math.floor(Math.random() * 100) + 1)
-    .then((data) => setArt(data || {}));
-  };
+    initialFetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   const darkModeTheme = createTheme(getDesignTokens(themeMode));
 
@@ -95,31 +94,28 @@ export default function App() {
     let isImageCorrect = false;
     let data;
     while (!isImageCorrect) {
-        console.log("should get continuous stuff");
         data = await handleFetchArt();
-        if(data.hasOwnProperty('primaryImage')) {isImageCorrect = checkImageDataCorrect(data)};
+        // eslint-disable-next-line no-prototype-builtins
+        if(data.hasOwnProperty('primaryImage')) {isImageCorrect = checkImageDataCorrect(data)}
       }
       setArt(data);
   }
 
   return (
     <>
-    <ThemeProvider theme={darkModeTheme}>
-      <Header onThemeChange={setThemeMode} themeMode={themeMode}/>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={() => {
-          setArt(continuousFetchArt)
-        }}>
-          More Art
-        </button>
-      </div>
+      <ThemeProvider theme={darkModeTheme}>
+        <Header onThemeChange={setThemeMode} themeMode={themeMode}/>
+        <div className="card">
+          <button onClick={() => {
+            setArt(continuousFetchArt)
+          }}>
+            More Art
+          </button>
+        </div>
 
-      <ArtContext.Provider value={art}>
-        <ArtCard />
-      </ArtContext.Provider>
+        <ArtContext.Provider value={art}>
+          <ArtCard />
+        </ArtContext.Provider>
       </ThemeProvider>
     </>
   )
