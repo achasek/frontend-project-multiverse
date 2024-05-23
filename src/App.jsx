@@ -71,7 +71,7 @@ export default function App() {
 
   useEffect(() => {
     const initialFetch = async () => {
-      const initialData = await metMuseumService.fetchDataById(3);
+      const initialData = await metMuseumService.fetchDataById(1241);
       setArt(initialData);
     };
 
