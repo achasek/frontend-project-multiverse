@@ -7,4 +7,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['@emotion/styled'],
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './testSetup.js', 
+  }
 })
