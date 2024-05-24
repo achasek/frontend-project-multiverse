@@ -5,7 +5,7 @@ import { Header } from './components/Header'
 import { ArtCard } from './components/ArtCard'
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { amber, grey } from '@mui/material/colors';
-import { ArtContext, FavoritesContext } from './Contexts';
+import { ArtContext, FavoritesContext, isFavoriteContext } from './Contexts';
 import Button from '@mui/material/Button';
 import { FavoriteCard } from './components/FavoriteCard'
 import Grid from '@mui/material/Grid';
@@ -45,6 +45,7 @@ export default function App() {
   const [themeMode, setThemeMode] = useState('light')
   const theme = useTheme();
   const [favorites, setFavorites] = useState([]);
+  const [isFav, setIsFav] = useState(false)
 
   // useEffect(() => {
   //   // const fetchData = async () => {
@@ -95,6 +96,7 @@ export default function App() {
   }
 
   async function continuousFetchArt() {
+    setIsFav(false)
     let isImageCorrect = false;
     let data;
     while (!isImageCorrect) {
@@ -105,11 +107,15 @@ export default function App() {
     setArt(data);
   }
 
-  const removeFavorite = () => {
-    setFavorites(favorites.slice(0, -1));
+
+  const removeFavorite = (deleteArt) => {
+    console.log(deleteArt.objectID)
+    console.log(favorites)
+    const filteredFavs = favorites.filter((fav) => fav.objectID !== deleteArt.objectID)
+    setFavorites(filteredFavs);
   }
 
-  const handleFavorites = () => {
+  const handleFavorites = (addArt) => {
     let isValidFavorite = true;
     for (let i = 0; i < favorites.length; i++) {
       if ((art.objectID === undefined) || (art.objectID === favorites[i].objectID)) {
@@ -123,10 +129,11 @@ export default function App() {
   }
 
   return (
-    <>
-      <ThemeProvider theme={darkModeTheme}>
+    <ThemeProvider theme={darkModeTheme}>
+      <ArtContext.Provider value={art}>
+        {/* <isFavoriteContext.Provider value={isFavorited}> */}
         <Header onThemeChange={setThemeMode} themeMode={themeMode} />
-        <div className="card">
+        <div className="card" style={{ paddingBottom: 10, marginTop: 20 }}>
           <button onClick={() => {
             setArt(continuousFetchArt)
           }}>
@@ -135,35 +142,28 @@ export default function App() {
         </div>
 
         <div style={{
-          display: "flex", flexDirection: "column", alignItems: "center",
-          justifyContent: "center"
+          margin: "auto",
+          display: "flex", alignItems: "center",
+          justifyContent: "center", width: "500px"
         }}>
-          <ArtContext.Provider value={art}>
-            <ArtCard />
-          </ArtContext.Provider>
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <Button size="small" onClick={handleFavorites}>Favorite</Button>
-            <Button size="small" onClick={removeFavorite}>Remove</Button>
-            <a href={art.objectWikidata_URL || art.objectURL} target='blank'>
-              <Button size="small">Learn More</Button>
-            </a>
-          </div>
+          <ArtCard setIsFav={setIsFav} isFav={isFav} onFavorite={handleFavorites} />
         </div>
-        <div style={{ display: "flex", flexDirection: "row", }}>
+        <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
           {/* TODO: Make display actually look good and/or move to a "favorites page" */}
           {
-            favorites.map((favorite) =>
-              <div style={{ margin: "1rem" }}>
+            favorites.map((favorite, index) =>
+              <div key={index} style={{ margin: "1rem" }}>
 
                 <FavoritesContext.Provider value={favorite}>
-                  <FavoriteCard />
+                  <FavoriteCard onDelete={removeFavorite} favorites={favorites} setFavorites={setFavorites} />
                 </FavoritesContext.Provider>
 
               </div>
             )}
         </div>
-      </ThemeProvider>
-    </>
+        {/* </isFavoriteContext.Provider> */}
+      </ArtContext.Provider>
+    </ThemeProvider>
   )
 }
 

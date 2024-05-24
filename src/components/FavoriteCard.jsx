@@ -1,16 +1,26 @@
 import { useContext, useState } from 'react';
-import { ArtContext, FavoritesContext } from '../Contexts';
+import { ArtContext, FavoritesContext, isFavoriteContext } from '../Contexts';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { IconButton } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
-export const FavoriteCard = () => {
+export const FavoriteCard = ({ setFavorites, favorites, onDelete }) => {
     const art = useContext(FavoritesContext)
+    const isFavorited = useContext(isFavoriteContext)
+
+
+    const handleDelete = (art) => {
+        console.log('to remove', art.id)
+        onDelete(art)
+    }
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardMedia
@@ -23,7 +33,12 @@ export const FavoriteCard = () => {
                     {art.title}
                 </Typography>
             </CardContent>
-            <FavoriteIcon />
+            <CardActions>
+                <IconButton onClick={() => handleDelete(art)}>
+                    <FavoriteIcon />
+                </IconButton>
+            </CardActions>
+            {/* <Button size="small" onClick={() => handleDelete(art)}>Remove</Button> */}
         </Card>
     );
 }
