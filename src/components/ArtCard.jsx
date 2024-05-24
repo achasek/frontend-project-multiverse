@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { ArtContext } from '../Contexts';
+import { useContext, useState } from 'react';
+import { ArtContext, FavoritesContext } from '../Contexts';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 
 export const ArtCard = () => {
   const art = useContext(ArtContext)
-
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -26,10 +25,6 @@ export const ArtCard = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Favorite</Button>
-        <a href={art.objectWikidata_URL || art.objectURL} target='blank'>
-          <Button size="small">Learn More</Button>
-        </a>
       </CardActions>
     </Card>
   );
