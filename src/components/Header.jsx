@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import FavoriteList from './FavoriteList';
+import { Link } from 'react-router-dom'
 
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = ['Favorites', 'About', 'Contact'];
 
 export const Header = ({ onThemeChange, themeMode }) => {
 
@@ -19,7 +21,7 @@ export const Header = ({ onThemeChange, themeMode }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', marginBottom: 20 }}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
@@ -43,14 +45,15 @@ export const Header = ({ onThemeChange, themeMode }) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            <Link className="link" to={'/'} >MUI</Link>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+                <Link className='link' to={'/favorites'}>Favorites</Link>
+            {/* {navItems.map((item) => (
+              <Button onClick={} key={item} sx={{ color: '#fff' }}>
                 {item}
               </Button>
-            ))}
+            ))} */}
           </Box>
         </Toolbar>
       </AppBar>
