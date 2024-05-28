@@ -5,11 +5,8 @@ import { Header } from './components/Header'
 import { ArtCard } from './components/ArtCard'
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { blue, grey } from '@mui/material/colors';
-import { ArtContext, FavoritesContext, isFavoriteContext } from './Contexts';
-import Button from '@mui/material/Button';
-import { FavoriteCard } from './components/FavoriteCard'
-import Grid from '@mui/material/Grid';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ArtContext, FavoritesContext} from './Contexts';
+import { Route, Switch } from 'react-router-dom';
 import FavoriteList from './components/FavoriteList'
 
 const getDesignTokens = (mode) => ({
@@ -111,8 +108,6 @@ export default function App() {
 
 
   const removeFavorite = (deleteArt) => {
-    console.log(deleteArt.objectID)
-    console.log(favorites)
     const filteredFavs = favorites.filter((fav) => fav.objectID !== deleteArt.objectID)
     setFavorites(filteredFavs);
   }
@@ -123,23 +118,23 @@ export default function App() {
       if ((art.objectID === undefined) || (art.objectID === favorites[i].objectID)) {
         isValidFavorite = false;
       }
-      console.log(art.objectID);
     }
     if (isValidFavorite == true) {
       setFavorites([...favorites, art]);
     }
   }
 
-  console.log(favorites)
-
   return (
     <ThemeProvider theme={darkModeTheme}>
       <ArtContext.Provider value={art}>
-        {/* <isFavoriteContext.Provider value={isFavorited}> */}
         <Header onThemeChange={setThemeMode} themeMode={themeMode} />
         <Switch>
           <Route exact path="/">
-            <div className="card" style={{ paddingBottom: 10, marginTop: 20 }}>
+            <div className="card" style={{
+              paddingBottom: 10, paddingTop: 5, margin: "auto",
+              display: "flex", alignItems: "center",
+              justifyContent: "center",
+            }}>
               <button onClick={() => {
                 setArt(continuousFetchArt)
               }}>
@@ -154,27 +149,13 @@ export default function App() {
             }}>
               <ArtCard setIsFav={setIsFav} isFav={isFav} onFavorite={handleFavorites} onRemove={removeFavorite} />
             </div>
-            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-              {/* TODO: Make display actually look good and/or move to a "favorites page" */}
-              {/* {
-                  favorites.map((favorite, index) =>
-                    <div key={index} style={{ margin: "1rem" }}>
-
-                      <FavoritesContext.Provider value={favorite}>
-                        <FavoriteCard onDelete={removeFavorite} favorites={favorites} setFavorites={setFavorites} />
-                      </FavoritesContext.Provider>
-
-                    </div>
-                  )} */}
-            </div>
           </Route>
           <FavoritesContext.Provider value={favorites}>
             <Route exact path="/favorites" >
               <FavoriteList onDelete={removeFavorite} />
-              </Route>
+            </Route>
           </FavoritesContext.Provider>
         </Switch>
-        {/* </isFavoriteContext.Provider> */}
       </ArtContext.Provider>
     </ThemeProvider>
   )

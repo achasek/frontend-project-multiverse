@@ -6,21 +6,8 @@ function FavoriteList({ onDelete, setFavorites }) {
 
     const favorites = useContext(FavoritesContext)
 
-    const favs = favorites.map((favorite, index) => {
-
-        <div key={index} style={{ margin: "1rem" }}>
-
-            <FavoriteCard onDelete={onDelete} favorite={favorite} setFavorites={setFavorites} />
-
-        </div>
-    })
-
-    console.log(favorites)
 
     return (
-        // <div>
-        //     {favs}
-        // </div>
         <div style={{  display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap', marginToP: 20 }}>
             {favorites.map((favorite, index) => {
                 return (
