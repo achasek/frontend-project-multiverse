@@ -8,7 +8,7 @@ import { blue, grey } from '@mui/material/colors';
 import { ArtContext, FavoritesContext} from './Contexts';
 import { Route, Switch } from 'react-router-dom';
 import FavoriteList from './components/FavoriteList'
-
+import { DepartmentList } from './components/DepartmentList'
 const getDesignTokens = (mode) => ({
   palette: {
     mode,
@@ -45,7 +45,9 @@ export default function App() {
   const theme = useTheme();
   const [favorites, setFavorites] = useState([]);
   const [isFav, setIsFav] = useState(false)
-
+  const [departments, setDepartments] = useState([]);
+  const [activeDepartment, setActiveDepartment] = useState({});
+  const [artList, setArtList] = useState([]);
   // useEffect(() => {
   //   // const fetchData = async () => {
   //   //   return await metMuseumService.fetchAllData();
@@ -80,28 +82,44 @@ export default function App() {
     };
 
     initialFetch();
+    setDepartmentList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const darkModeTheme = createTheme(getDesignTokens(themeMode));
 
+  
+  async function setDepartmentList() {
+   const data = await metMuseumService.fetchAllDeparmentsList();
+   setDepartments(data.departments);
+  }
+
   function checkImageDataCorrect(data) {
     return data.primaryImage !== "";
   }
 
-  async function handleFetchArt() {
-    const data = await metMuseumService.fetchDataById(Math.floor(Math.random() * 400) + 1);
+  async function handleFetchArt(artList) {
+    let data;
+      const randomIndex = Math.floor(Math.random() * artList.length);
+      const randomElement = artList[randomIndex];
+      data = await metMuseumService.fetchDataById(randomElement);
     return data;
+  }
+
+  async function getArtListFromDepartment(departmentId) {
+    const artFromDep =  await metMuseumService.fetchSingleDepartmentData(departmentId);
+    const artIds = artFromDep.objectIDs;
+    return artIds;
   }
 
   async function continuousFetchArt() {
     setIsFav(false)
-    let isImageCorrect = false;
+    let isDataCorrect = false;
     let data;
-    while (!isImageCorrect) {
-      data = await handleFetchArt();
+    while (!isDataCorrect) {
+      data = await handleFetchArt(artList);
       // eslint-disable-next-line no-prototype-builtins
-      if (data.hasOwnProperty('primaryImage')) { isImageCorrect = checkImageDataCorrect(data) }
+      if (data.hasOwnProperty('primaryImage')) { isDataCorrect = checkImageDataCorrect(data) }
     }
     setArt(data);
   }
@@ -144,8 +162,8 @@ export default function App() {
 
             <div style={{
               margin: "auto",
-              display: "flex", alignItems: "center",
-              justifyContent: "center", width: "500px"
+              display: "flex", alignItems: "",
+              justifyContent: "flex-end", width: "500px",
             }}>
               <ArtCard setIsFav={setIsFav} isFav={isFav} onFavorite={handleFavorites} onRemove={removeFavorite} />
             </div>
