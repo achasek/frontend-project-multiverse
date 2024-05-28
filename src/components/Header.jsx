@@ -45,15 +45,10 @@ export const Header = ({ onThemeChange, themeMode }) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            <Link className="link" to={'/'} >MUI</Link>
+            <Link className="link" to={'/'} >Historic Art Archive</Link>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <Link className='link' to={'/favorites'}>Favorites</Link>
-            {/* {navItems.map((item) => (
-              <Button onClick={} key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))} */}
           </Box>
         </Toolbar>
       </AppBar>
