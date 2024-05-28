@@ -48,37 +48,14 @@ export default function App() {
   const [departments, setDepartments] = useState([]);
   const [activeDepartment, setActiveDepartment] = useState({});
   const [artList, setArtList] = useState([]);
-  // useEffect(() => {
-  //   // const fetchData = async () => {
-  //   //   return await metMuseumService.fetchAllData();
-  //   // }
-  //   // const fetchData = async () => {
-  //   //   return await metMuseumService.fetchSingleDepartmentData(3|9|12);
-  //   // }
-  //   // const fetchData = async () => {
-  //   //   // param must be string
-  //   //   return await metMuseumService.fetchDataAfterDate("2022-10-22");
-  //   // }
-  //   // const fetchData = async () => {
-  //   //   return await metMuseumService.fetchDepartmentAndDataAfterDate("2022-10-22", 3|9|12);
-  //   // }
-  //   // const fetchData = async () => {
-  //   //   return await metMuseumService.fetchDataById(8);
-  //   // }
-  //   // const fetchData = async () => {
-  //   //   return await metMuseumService.fetchAllDeparmentsList();
-  //   // }
-  //   const fetchData = async () => {
-  //     return await metMuseumService.fetchDataBySearchQuery('sunflowers');
-  //   }
-
-  //   console.log(fetchData());
-  // }, []);
 
   useEffect(() => {
     const initialFetch = async () => {
       const initialData = await metMuseumService.fetchDataById(1241);
       setArt(initialData);
+
+      const initialArtList = await getAllArtIds();
+      setArtList(initialArtList);
     };
 
     initialFetch();
@@ -88,6 +65,11 @@ export default function App() {
 
   const darkModeTheme = createTheme(getDesignTokens(themeMode));
 
+  async function getAllArtIds() {
+    const allArt = await metMuseumService.fetchAllData();
+    const artIds = allArt.objectIDs;
+    return artIds;
+  }
   
   async function setDepartmentList() {
    const data = await metMuseumService.fetchAllDeparmentsList();
@@ -165,6 +147,8 @@ export default function App() {
               display: "flex", alignItems: "",
               justifyContent: "flex-end", width: "500px",
             }}>
+              <DepartmentList departments={departments} activeDepartment={activeDepartment} setActiveDepartment={setActiveDepartment} 
+              getArtListFromDepartment={getArtListFromDepartment} setArtList={setArtList}/>
               <ArtCard setIsFav={setIsFav} isFav={isFav} onFavorite={handleFavorites} onRemove={removeFavorite} />
             </div>
           </Route>
