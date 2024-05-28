@@ -11,8 +11,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
-export const FavoriteCard = ({ setFavorites, favorites, onDelete }) => {
-    const art = useContext(FavoritesContext)
+export const FavoriteCard = ({ setFavorites, favorite, onDelete }) => {
+    const art = favorite
     const isFavorited = useContext(isFavoriteContext)
 
 
@@ -22,7 +22,7 @@ export const FavoriteCard = ({ setFavorites, favorites, onDelete }) => {
     }
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345, }}>
             <CardMedia
                 sx={{ height: 140 }}
                 image={art.primaryImage || "https://upload.wikimedia.org/wikipedia/commons/5/59/Monet_-_Impression%2C_Sunrise.jpg"}

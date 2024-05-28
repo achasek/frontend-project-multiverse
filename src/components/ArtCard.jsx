@@ -10,7 +10,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
 import { IconButton } from '@mui/material';
 
-export const ArtCard = ({ onFavorite, setIsFav, isFav }) => {
+export const ArtCard = ({ onFavorite, setIsFav, isFav, onRemove }) => {
   const art = useContext(ArtContext)
   const favorites = useContext(FavoritesContext)
   const isFavorited = useContext(isFavoriteContext)
@@ -22,6 +22,7 @@ export const ArtCard = ({ onFavorite, setIsFav, isFav }) => {
     // console.log(art.objectID)
     if (isFav === true) {
       console.log("is true")
+      onRemove(art)
       setIsFav(false)
 
     }
@@ -31,7 +32,6 @@ export const ArtCard = ({ onFavorite, setIsFav, isFav }) => {
 
     }
   }
-  console.log(favorites)
 
   return (
     <Card sx={{ minWidth: 500 }}>
